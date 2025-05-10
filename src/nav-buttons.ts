@@ -12,7 +12,7 @@ type TopBarButtonPosition = "left" | "right";
  * Buttons can be anchored to the left or right of the central spacer element.
  *
  * @param text The text label for the button.
- * @param iconClass The CSS class for the button's icon (e.g., "icon-home", "icon-star").
+ * @param iconClass The CSS class for the button's icon (e.g., "globe", "radar").
  * @param onClick A function to be called when the button is clicked.
  * @param position Where to place the button in the top bar: "left" or "right".
  * @returns The created button element (HTMLDivElement) or null if a required container element is not found.
@@ -100,7 +100,7 @@ function addTopBarButton(
  * Buttons are added to the main menu list (`ul.menu`).
  *
  * @param text The text label for the button.
- * @param iconClass The CSS class for the button's icon (e.g., "icon-flag-empty", "icon-users").
+ * @param iconClass The CSS class for the button's icon (e.g., "globe", "radar").
  * @param onClick A function to be called when the button is clicked.
  * @param href The URL the button should link to. Defaults to "#" for action-only buttons.
  * @returns The created list item element (HTMLLIElement) or null if a required container element is not found.
