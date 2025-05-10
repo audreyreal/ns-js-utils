@@ -42,7 +42,7 @@ function addTopBarButton(
     linkElement.style.cursor = "pointer"; // Indicate it's clickable
 
     const iconElement = document.createElement("i");
-    iconElement.className = iconClass; // e.g., "icon-star"
+    iconElement.className = `icon-${iconClass}`;
 
     linkElement.appendChild(iconElement);
     linkElement.appendChild(document.createTextNode(` ${text}`)); // Add a space before text if icon is present
