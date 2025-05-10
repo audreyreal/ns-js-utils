@@ -1,3 +1,5 @@
+import { Icon } from "./icons";
+
 /**
  * Represents the possible positions for a top bar button.
  */
@@ -17,7 +19,7 @@ type TopBarButtonPosition = "left" | "right";
  */
 function addTopBarButton(
     text: string,
-    iconClass: string,
+    iconClass: Icon,
     onClick: () => void,
     position: TopBarButtonPosition = "right"
 ): HTMLDivElement | null {
@@ -105,7 +107,7 @@ function addTopBarButton(
  */
 function addSidebarButton(
     text: string,
-    iconClass: string,
+    iconClass: Icon,
     onClick: () => void,
     href: string = "#"
 ): HTMLLIElement | null {
@@ -132,7 +134,7 @@ function addSidebarButton(
 
 
     const iconElement = document.createElement("i");
-    iconElement.className = iconClass;
+    iconElement.className = `icon-${iconClass}`;
 
     const panelTextDiv = document.createElement("div");
     panelTextDiv.className = "paneltext";
@@ -161,38 +163,4 @@ function addSidebarButton(
     return listItem;
 }
 
-// --- Example Usage ---
-// Ensure this code runs after the DOM is fully loaded.
-// For a browser extension, this would typically be in your content script.
-
-/*
-document.addEventListener('DOMContentLoaded', () => {
-    // Example: Add a "My Stats" button to the top bar (left)
-    addTopBarButton("My Stats", "icon-chart-bar", () => {
-        alert("My Stats button clicked!");
-        // Add navigation or other logic here
-    }, "left");
-
-    // Example: Add a "Quick Action" button to the top bar (right)
-    addTopBarButton("Quick Action", "icon-rocket", () => {
-        console.log("Quick Action initiated!");
-    }, "right");
-
-    // Example: Add a "Custom Page" link to the sidebar
-    addSidebarButton("Custom Page", "icon-doc-text", () => {
-        console.log("Navigating to custom page (if href was different) or performing action.");
-        // If href is not "#", the browser will navigate.
-        // If href is "#", this onClick is the primary action.
-    }, "/page=my_custom_extension_page");
-
-    // Example: Add an action-only button to the sidebar
-    addSidebarButton("Do Something", "icon-magic", () => {
-        alert("Sidebar magic button activated!");
-    });
-});
-*/
-
-// To make these functions available in a browser extension context,
-// you might not need to export them if they are in the same content script file.
-// If you are using modules, you would use:
-// export { addTopBarButton, addSidebarButton };
+export { addTopBarButton, addSidebarButton };
