@@ -1,0 +1,32 @@
+name: Publish Helper Script to Gist
+
+on:
+  push:
+    branches:
+      - main # Or your default branch
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # Or your preferred Node.js version
+
+    - name: Install dependencies
+      run: npm install typescript
+
+    - name: Build TypeScript
+      run: tsc
+
+    - name: Publish to Gist
+      uses: actions/upload-gist@v1
+      with:
+        gist_id: '99982831414e8566d531f917515d83e9' # Replace with your Gist ID if updating an existing one
+        files: dist/nationstates-helpers.js
+        token: ${{ secrets.GIST_TOKEN }}

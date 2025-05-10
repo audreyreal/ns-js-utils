@@ -45,7 +45,7 @@ function addTopBarButton(
     iconElement.className = `icon-${iconClass}`;
 
     linkElement.appendChild(iconElement);
-    linkElement.appendChild(document.createTextNode(` ${text}`)); // Add a space before text if icon is present
+    linkElement.appendChild(document.createTextNode(` ${text.toUpperCase()}`)); // Add a space before text if icon is present
 
     linkElement.addEventListener("click", (e) => {
         e.preventDefault(); // Prevent default anchor action
@@ -138,7 +138,7 @@ function addSidebarButton(
 
     const panelTextDiv = document.createElement("div");
     panelTextDiv.className = "paneltext";
-    panelTextDiv.textContent = text;
+    panelTextDiv.textContent = text.toUpperCase();
 
     linkElement.appendChild(iconElement);
     linkElement.appendChild(panelTextDiv);
