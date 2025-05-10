@@ -1,19 +1,19 @@
 {
-    "compilerOptions": {
-      "target": "ES2024",     // Compile to JavaScript version compatible with modern browsers
-      "module": "none",        // No module system, good for simple scripts or when using outFile
-      "outFile": "./dist/nationstates-helpers.js", // Combine output into a single file in a 'dist' folder
-      "strict": true,          // Enable all strict type-checking options
-      "esModuleInterop": true, // Enables interoperability between CommonJS and ES Modules
-      "skipLibCheck": true,    // Skip type checking of declaration files
-      "forceConsistentCasingInFileNames": true,
-      // "sourceMap": true,    // Uncomment if you want source maps for debugging
-      // "removeComments": true // Uncomment to remove comments from the output JS
-    },
-    "include": [
-      "./src/*.ts" // Or "*.ts" to include all .ts files in the directory
-    ],
-    "exclude": [
-      "node_modules"
-    ]
-  }
+  "compilerOptions": {
+    "target": "ES2024",     // Compile to JavaScript version compatible with modern browsers
+    "module": "none",        // No module system, good for simple scripts or when using outFile
+    "outFile": "./dist/nationstates-helpers.js", // Combine output into a single file in a 'dist' folder
+    "strict": true,          // Enable all strict type-checking options
+    "esModuleInterop": true, // Enables interoperability between CommonJS and ES Modules
+    "skipLibCheck": true,    // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true,
+    // "sourceMap": true,    // Uncomment if you want source maps for debugging
+    // "removeComments": true // Uncomment to remove comments from the output JS
+  },
+  "include": [
+    "./src/*.ts" // Or "*.ts" to include all .ts files in the directory
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

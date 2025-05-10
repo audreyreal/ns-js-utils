@@ -1,9 +1,11 @@
-import { Icon } from "./icons";
-
 /**
  * Represents the possible positions for a top bar button.
  */
 type TopBarButtonPosition = "left" | "right";
+/**
+ * Type for all icons, all listed at https://www.nationstates.net/page=dispatch/id=1625339
+ */
+type Icon = import("./icons.d.ts").Icon
 
 /**
  * Adds a button to the top bar of the NationStates interface.
@@ -162,5 +164,3 @@ function addSidebarButton(
 
     return listItem;
 }
-
-export { addTopBarButton, addSidebarButton };
