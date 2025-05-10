@@ -28,5 +28,5 @@ jobs:
       uses: exuanbo/actions-deploy-gist@v1
       with:
         gist_id: '99982831414e8566d531f917515d83e9' # Replace with your Gist ID if updating an existing one
-        file_path: dist/nationstates-helpers.js
+        file_path: ./dist/nationstates-helpers.js
         token: ${{ secrets.GIST_TOKEN }}
