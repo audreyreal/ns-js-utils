@@ -80,7 +80,7 @@ function addTopBarButton(
                 // If login switcher isn't there (e.g., logged out, or different layout),
                 // try to insert before the logout box or just append to the spacer.
                 const logoutBox = spacer.querySelector("#logoutbox")?.parentElement; // logoutbox is inside a 'bel' div
-                 if (logoutBox) {
+                if (logoutBox) {
                     spacer.insertBefore(buttonDiv, logoutBox);
                 } else {
                     spacer.appendChild(buttonDiv); // Append to the spacer container
