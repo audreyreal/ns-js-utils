@@ -29,13 +29,13 @@ jobs:
 
     - id: "upload-documentation"
       name: "Upload Pages artifact"
-      uses: "actions/upload-pages-artifact@v2"
+      uses: "actions/upload-pages-artifact"
       with:
         path: "docs/"
 
     - id: "deployment"
       name: "Deploy documentation to GitHub Pages"
-      uses: "actions/deploy-pages@v2"
+      uses: "actions/deploy-pages"
 
     - name: Publish to Gist
       uses: exuanbo/actions-deploy-gist@v1
