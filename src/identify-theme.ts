@@ -12,7 +12,7 @@ type NationStatesTheme =
 /**
  * Analyzes the provided HTML content to detect the active NationStates theme.
  *
- * @param htmlContent - A string containing the HTML content of a NationStates page.
+ * @param htmlContent - A string containing the HTML content of a NationStates page. Likely document.documentElement.innerHTML
  * @returns The detected NationStatesTheme.
  */
 function detectNationStatesTheme(htmlContent: string): NationStatesTheme {

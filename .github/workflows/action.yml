@@ -19,10 +19,19 @@ jobs:
         node-version: '20' # Or your preferred Node.js version
 
     - name: Install dependencies
-      run: npm install typescript
+      run: npm install
 
     - name: Build TypeScript
-      run: tsc
+      run: npm run build
+
+    - name: Build docs
+      run: npm run build-docs
+
+    - name: Deploy to Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
 
     - name: Publish to Gist
       uses: exuanbo/actions-deploy-gist@v1
