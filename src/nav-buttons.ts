@@ -39,6 +39,13 @@ function addTopBarButton(
     belContentDiv.className = "belcontent";
 
     const linkElement = document.createElement("a");
+
+    // Apply background, padding, and color if on welcome page
+    if (document.getElementById("welcomelinks")) {
+        linkElement.style.background = "rgba(255,255,255,0.7)";
+        linkElement.style.padding = "4px 18px";
+        linkElement.style.color = "#000";
+    }
     linkElement.className = "bellink";
     linkElement.href = "#"; // Prevent page navigation for non-link buttons
     linkElement.style.cursor = "pointer"; // Indicate it's clickable
@@ -60,16 +67,7 @@ function addTopBarButton(
     // Insert the button at the correct position
     const spacer = banner.querySelector("div.belspacer.belspacermain");
 
-    if (position === "left") {
-        if (spacer) {
-            banner.insertBefore(buttonDiv, spacer);
-        } else {
-            // Fallback: if spacer isn't found (unlikely), append to banner.
-            // This might not be perfectly "left" but better than not adding.
-            console.warn("NationStates Button Helper: Top bar spacer (div.belspacer.belspacermain) not found for left positioning. Appending to banner.");
-            banner.appendChild(buttonDiv);
-        }
-    } else if (position === "right") {
+    if (position === "right" || document.body.id === "loggedout") {
         if (spacer) {
             // Right-aligned buttons go inside the 'belspacermain' container,
             // typically before the "SWITCH" or "LOGOUT" buttons.
@@ -90,6 +88,18 @@ function addTopBarButton(
             console.error("NationStates Button Helper: Top bar spacer (div.belspacer.belspacermain) not found for right positioning.");
             return null; // Can't position right without the spacer
         }
+    } else if (position === "left") {
+        if (spacer) {
+            banner.insertBefore(buttonDiv, spacer);
+        } else {
+            // Fallback: if spacer isn't found (unlikely), append to banner.
+            // This might not be perfectly "left" but better than not adding.
+            console.warn("NationStates Button Helper: Top bar spacer (div.belspacer.belspacermain) not found for left positioning. Appending to banner.");
+            banner.appendChild(buttonDiv);
+        }
+    } else {
+        console.error(`NationStates Button Helper: Invalid position "${position}" provided. Must be "left" or "right".`);
+        return null;
     }
 
     return buttonDiv;
