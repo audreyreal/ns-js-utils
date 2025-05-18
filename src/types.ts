@@ -1,7 +1,8 @@
+type TopBarButtonPosition = "left" | "right";
 /**
  * Represents the possible icons available for the NationStates interface.
  */
-export type Icon =
+type Icon =
     | "align-left"
     | "chat-empty"
     | "login"
