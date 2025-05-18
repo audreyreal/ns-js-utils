@@ -11,6 +11,7 @@
     // "removeComments": true // Uncomment to remove comments from the output JS
   },
   "include": [
+    "./src/*/*.ts",
     "./src/*.ts" // Or "*.ts" to include all .ts files in the directory
   ],
   "exclude": [
