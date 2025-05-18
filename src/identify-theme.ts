@@ -1,15 +1,4 @@
 /**
- * Enum representing the possible NationStates themes.
- */
-type NationStatesTheme =
-    | "Antiquity"
-    | "Century"
-    | "Rift"
-    | "Mobile"
-    | "None"
-    | "Unknown";
-
-/**
  * Analyzes the provided HTML content to detect the active NationStates theme.
  *
  * @param htmlContent - A string containing the HTML content of a NationStates page. Likely document.documentElement.innerHTML

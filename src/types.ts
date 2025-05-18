@@ -1,4 +1,19 @@
+/**
+ * Type representing the possible NationStates themes.
+ */
+type NationStatesTheme =
+    | "Antiquity"
+    | "Century"
+    | "Rift"
+    | "Mobile"
+    | "None"
+    | "Unknown";
+
+/**
+ * Represents the possible positions of top bar buttons.
+ */
 type TopBarButtonPosition = "left" | "right";
+
 /**
  * Represents the possible icons available for the NationStates interface.
  */
