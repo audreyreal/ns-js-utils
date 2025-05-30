@@ -29,14 +29,14 @@ class NSScript {
         }
 
         this.isHtmlRequestInProgress = true;
-        
+
         // Disable all submit buttons to enforce simultaneity
         document.querySelectorAll('button[type="submit"]').forEach(btn => {
             (btn as HTMLButtonElement).disabled = true;
         });
         try {
             const baseUrl = "https://www.nationstates.net/";
-            
+
             // Construct the value for the 'script' parameter
             const scriptParamValue = `${this.scriptName} v${this.scriptVersion} by ${this.scriptAuthor} in use by ${this.currentUser}`;
 
@@ -70,7 +70,7 @@ class NSScript {
             return response;
         } finally {
             this.isHtmlRequestInProgress = false;
-            
+
             // Re-enable all submit buttons
             document.querySelectorAll('button[type="submit"]').forEach(btn => {
                 (btn as HTMLButtonElement).disabled = false;
