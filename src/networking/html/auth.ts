@@ -1,60 +1,66 @@
 /**
- * Stores the nation name from the body's data-nname attribute in localStorage.
+ * Extracts the nation name from the body's data-nname attribute in the given Document.
+ * @param doc The Document to extract from
+ * @returns The nation name or null if not found
  */
-function storeNation(): void {
-    const bodyElement = document.body as HTMLBodyElement | null;
-    const nationName = bodyElement?.getAttribute('data-nname');
+function extractNation(doc: Document): string | null {
+    return doc.body?.getAttribute('data-nname') || null;
+}
 
-    if (nationName) {
+/**
+ * Extracts the chk value from the hidden input with name="chk" in the given Document.
+ * @param doc The Document to extract from
+ * @returns The chk value or null if not found
+ */
+function extractChk(doc: Document): string | null {
+    const chkInput = doc.querySelector('input[name="chk"]') as HTMLInputElement | null;
+    return chkInput?.value || null;
+}
+
+/**
+ * Extracts the localid value from the hidden input with name="localid" in the given Document.
+ * @param doc The Document to extract from
+ * @returns The localid value or null if not found
+ */
+function extractLocalid(doc: Document): string | null {
+    const localidInput = doc.querySelector('input[name="localid"]') as HTMLInputElement | null;
+    return localidInput?.value || null;
+}
+
+/**
+ * Stores nation, chk, and localid from the given Document in localStorage.
+ * @param doc The Document to extract auth data from
+ */
+function storeAuth(doc: Document): void {
+    const nation = extractNation(doc);
+    const chk = extractChk(doc);
+    const localid = extractLocalid(doc);
+
+    if (nation) {
         try {
-            localStorage.setItem('lastKnownNation', nationName);
+            localStorage.setItem('lastKnownNation', nation);
         } catch (error) {
             console.error('Error storing lastKnownNation to localStorage:', error);
         }
     }
-}
 
-/**
- * Stores the chk value from the hidden input with name="chk" in localStorage.
- */
-function storeChk(): void {
-    const chkInput = document.querySelector('input[name="chk"]') as HTMLInputElement | null;
-    const chkValue = chkInput?.value;
-
-    if (chkValue) {
+    if (chk) {
         try {
-            localStorage.setItem('lastKnownChk', chkValue);
+            localStorage.setItem('lastKnownChk', chk);
         } catch (error) {
             console.error('Error storing lastKnownChk to localStorage:', error);
         }
     }
-}
 
-/**
- * Stores the localid value from the hidden input with name="localid" in localStorage.
- */
-function storeLocalid(): void {
-    const localidInput = document.querySelector('input[name="localid"]') as HTMLInputElement | null;
-    const localidValue = localidInput?.value;
-
-    if (localidValue) {
+    if (localid) {
         try {
-            localStorage.setItem('lastKnownLocalid', localidValue);
+            localStorage.setItem('lastKnownLocalid', localid);
         } catch (error) {
             console.error('Error storing lastKnownLocalid to localStorage:', error);
         }
     }
 }
 
-/**
- * Retrieves nation, chk, and localid from the DOM and stores them in localStorage.
- */
-function storeAuth(): void {
-    storeNation();
-    storeChk();
-    storeLocalid();
-}
-
 window.addEventListener('load', () => {
-    storeAuth();
+    storeAuth(document);
 });

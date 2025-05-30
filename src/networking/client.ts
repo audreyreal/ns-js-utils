@@ -54,6 +54,9 @@ class NSScript {
             // Add special parameters
             requestParams.append("userclick", Date.now().toString());
             requestParams.append("script", scriptParamValue);
+            if (!pagePath.endsWith('.cgi')) {
+                requestParams.append("template-overall", "none");
+            }
 
             // Ensure the baseUrl has a trailing slash for correct URL resolution
             const safeBaseUrl = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
@@ -76,5 +79,42 @@ class NSScript {
                 (btn as HTMLButtonElement).disabled = false;
             });
         }
+    }
+
+    public async getNsHtmlPage(
+        pagePath: string,
+        payload?: Record<string, string | number | boolean>
+    ): Promise<Document> {
+        const response = await this.makeNsHtmlRequest(pagePath, payload);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch page: ${response.statusText}`);
+        }
+        const text = await response.text();
+        const doc = parseHtml(text);
+        storeAuth(doc);
+        return doc;
+    }
+
+    public async login(
+        nation: string,
+        password: string,
+    ): Promise<boolean> {
+        const doc = await this.getNsHtmlPage("page=display_region", {
+            "region": "rwby",
+            "nation": nation,
+            "password": password,
+            "logging_in": "1",
+            "submit": "Login",
+        });
+        const canonNation = canonicalize(nation);
+        const moveRegionButton = doc.querySelector('button[name="move_region"]');
+        if (moveRegionButton) {
+            const moveRegionText = moveRegionButton.textContent?.trim();
+            if (moveRegionText && canonicalize(moveRegionText).includes(canonNation)) {
+                return true;
+            }
+        }
+        console.error("Login failed. Nation name not found in move_region button text.");
+        return false;
     }
 }
