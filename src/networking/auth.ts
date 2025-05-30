@@ -8,7 +8,6 @@ function storeNation(): void {
     if (nationName) {
         try {
             localStorage.setItem('lastKnownNation', nationName);
-            console.log(`Stored lastKnownNation: ${nationName}`);
         } catch (error) {
             console.error('Error storing lastKnownNation to localStorage:', error);
         }
@@ -25,7 +24,6 @@ function storeChk(): void {
     if (chkValue) {
         try {
             localStorage.setItem('lastKnownChk', chkValue);
-            console.log(`Stored lastKnownChk: ${chkValue}`);
         } catch (error) {
             console.error('Error storing lastKnownChk to localStorage:', error);
         }
@@ -42,7 +40,6 @@ function storeLocalid(): void {
     if (localidValue) {
         try {
             localStorage.setItem('lastKnownLocalid', localidValue);
-            console.log(`Stored lastKnownLocalid: ${localidValue}`);
         } catch (error) {
             console.error('Error storing lastKnownLocalid to localStorage:', error);
         }
