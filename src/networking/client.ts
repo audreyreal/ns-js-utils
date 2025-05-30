@@ -58,6 +58,16 @@ class NSScript {
                 requestParams.append("template-overall", "none");
             }
 
+            // inject auth values
+            const lastKnownChk = localStorage.getItem('lastKnownChk');
+            if (lastKnownChk) {
+                requestParams.append("chk", lastKnownChk);
+            }
+            const lastKnownLocalid = localStorage.getItem('lastKnownLocalid');
+            if (lastKnownLocalid) {
+                requestParams.append("localid", lastKnownLocalid);
+            }
+
             // Ensure the baseUrl has a trailing slash for correct URL resolution
             const safeBaseUrl = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
             const finalUrl = new URL(pagePath, safeBaseUrl).toString();
@@ -84,22 +94,28 @@ class NSScript {
     public async getNsHtmlPage(
         pagePath: string,
         payload?: Record<string, string | number | boolean>
-    ): Promise<Document> {
+    ): Promise<String> {
         const response = await this.makeNsHtmlRequest(pagePath, payload);
         if (!response.ok) {
             throw new Error(`Failed to fetch page: ${response.statusText}`);
         }
         const text = await response.text();
+        if (text.includes("Failed security check")) {
+            throw new Error("Failed security check. Please try again later.");
+        }
+        if (text.includes("Border Patrol")) {
+            throw new Error("You need to solve the border patrol captcha before proceeding.");
+        }
         const doc = parseHtml(text);
         storeAuth(doc);
-        return doc;
+        return text;
     }
 
     public async login(
         nation: string,
         password: string,
     ): Promise<boolean> {
-        const doc = await this.getNsHtmlPage("page=display_region", {
+        const text = await this.getNsHtmlPage("page=display_region", {
             "region": "rwby",
             "nation": nation,
             "password": password,
@@ -107,14 +123,48 @@ class NSScript {
             "submit": "Login",
         });
         const canonNation = canonicalize(nation);
-        const moveRegionButton = doc.querySelector('button[name="move_region"]');
-        if (moveRegionButton) {
-            const moveRegionText = moveRegionButton.textContent?.trim();
-            if (moveRegionText && canonicalize(moveRegionText).includes(canonNation)) {
-                return true;
-            }
+        const re = /(?<=Move )(.*?)(?= to RWBY!)/; // This regex captures the nation name in the "Move [Nation] to RWBY!" button
+        const match = text.match(re);
+        if (match && canonicalize(match[0]) === canonNation) { // Check if the nation name in the button matches the input nation
+            return true
         }
-        console.error("Login failed. Nation name not found in move_region button text.");
+        console.error("Failed to login to nation:", nation);
+        return false;
+    }
+
+    public async moveToRegion(region: string, password?: string): Promise<boolean> {
+        let payload: MoveRegionFormData = {
+            "region_name": region,
+            "move_region": "1"
+        }
+        if (password) {
+            payload.password = password;
+        }
+        const text = await this.getNsHtmlPage("page=change_region", payload);
+        if (text.includes("Success!")) {
+            return true;
+        }
+        console.error("Failed to move to region:", region);
+        return false;
+    }
+
+    public async applyToWorldAssembly(reapply?: boolean) {
+        let payload: ApplyToWorldAssemblyFormData = {
+            "action": "join_UN"
+        }
+        if (reapply) {
+            payload.resend = "1";
+        } else {
+            payload.submit = "1";
+        }
+
+        const text = await this.getNsHtmlPage("page=UN_Status", {
+            "action": "join_UN",
+        });
+        if (text.includes("Your application to join the World Assembly has been received!")) {
+            return true;
+        }
+        console.error("Failed to apply to World Assembly");
         return false;
     }
 }
