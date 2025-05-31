@@ -1,46 +1,62 @@
-class StatusBubble extends HTMLDivElement {
-    public constructor() {
-        super();
-        this.textContent = 'Awaiting orders';
-        this.style.color = 'black';
-        this.style.width = '200px';
-        this.style.height = '100px';
-        this.style.border = 'solid 1px black';
-        this.style.left = '20px';
-        this.style.bottom = '20px';
-        this.style.position = 'fixed';
-        this.style.fontSize = '12px';
-        this.style.textAlign = 'center';
-        this.style.verticalAlign = 'middle';
-        this.style.lineHeight = '25px';
-        this.style.overflowWrap = 'anywhere';
-        this.style.padding = '10px';
-        this.style.zIndex = '2';
-        this.style.backgroundColor = '#9696FF';
+class StatusBubble {
+    private static instance: StatusBubble | null = null;
+    private element: HTMLDivElement;
+
+    private constructor() {
+        this.element = document.createElement('div');
+        this.element.textContent = 'Awaiting orders';
+        this.element.style.color = 'black';
+        this.element.style.width = '200px';
+        this.element.style.height = '100px';
+        this.element.style.border = 'solid 1px black';
+        this.element.style.left = '20px';
+        this.element.style.bottom = '20px';
+        this.element.style.position = 'fixed';
+        this.element.style.fontSize = '12px';
+        this.element.style.textAlign = 'center';
+        this.element.style.verticalAlign = 'middle';
+        this.element.style.lineHeight = '25px'; // For vertical centering text
+        this.element.style.overflowWrap = 'anywhere';
+        this.element.style.padding = '10px';
+        this.element.style.zIndex = '20000'; // Ensure it's above all other elements
+        this.element.style.backgroundColor = '#9696FF'; // Default color
+        this.element.style.display = 'block'; // Initially visible with default message
     }
 
-    public show(message: string): void {
-        this.textContent = message;
-        this.style.display = 'block';
+    public static getInstance(): StatusBubble {
+        if (!StatusBubble.instance) {
+            StatusBubble.instance = new StatusBubble();
+            if (typeof document !== 'undefined' && document.body) {
+                document.body.appendChild(StatusBubble.instance.element);
+            }
+        }
+        return StatusBubble.instance;
+    }
+
+    public show(message?: string): void {
+        if (message) {
+            this.element.textContent = message;
+        }
+        this.element.style.display = 'block';
     }
 
     public hide(): void {
-        this.style.display = 'none';
+        this.element.style.display = 'none';
     }
 
     public setColor(color: string): void {
         switch (color) {
             case 'blue':
-                this.style.backgroundColor = '#9696FF';
+                this.element.style.backgroundColor = '#9696FF';
                 break;
             case 'yellow':
-                this.style.backgroundColor = '#FFFF64';
+                this.element.style.backgroundColor = '#FFFF64';
                 break;
             case 'red':
-                this.style.backgroundColor = '#FF6464';
+                this.element.style.backgroundColor = '#FF6464';
                 break;
             default:
-                this.style.backgroundColor = color;
+                this.element.style.backgroundColor = color;
                 break;
         }
     }
@@ -61,11 +77,7 @@ class StatusBubble extends HTMLDivElement {
     }
 }
 
-// check if running in a browser environment
-if (typeof window !== 'undefined') {
-    customElements.define('status-bubble', StatusBubble, { extends: 'div' });
-}
 // in order to use this in a browser, you would need to create an instance of StatusBubble and append it to the document body
 // Example usage:
-// const statusBubble = new StatusBubble();
-// document.body.appendChild(statusBubble);
+// const statusBubble = StatusBubble.getInstance();
+// statusBubble.show("Hello from singleton!");
