@@ -158,9 +158,7 @@ class NSScript {
             payload.submit = "1";
         }
 
-        const text = await this.getNsHtmlPage("page=UN_Status", {
-            "action": "join_UN",
-        });
+        const text = await this.getNsHtmlPage("page=UN_Status", payload);
         if (text.includes("Your application to join the World Assembly has been received!")) {
             return true;
         }
