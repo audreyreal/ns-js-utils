@@ -91,6 +91,14 @@ class NSScript {
         }
     }
 
+    /**
+     * Fetches and processes an HTML page from the NationStates site.
+     * Handles security checks and captcha detection.
+     * @param pagePath The path to the page on NationStates.
+     * @param payload Optional payload to send with the request.
+     * @returns A Promise that resolves to the HTML content of the page as a string.
+     * @throws Error if the request fails, security check fails, or captcha is detected.
+     */
     public async getNsHtmlPage(
         pagePath: string,
         payload?: Record<string, string | number | boolean>
@@ -101,7 +109,7 @@ class NSScript {
         }
         const text = await response.text();
         if (text.includes("Failed security check")) {
-            throw new Error("Failed security check. Please try again later.");
+            throw new Error("Failed security check. Please run reauth and try again.");
         }
         if (text.includes("Border Patrol")) {
             throw new Error("You need to solve the border patrol captcha before proceeding.");
@@ -111,6 +119,12 @@ class NSScript {
         return text;
     }
 
+    /**
+     * Attempts to log in to a NationStates nation.
+     * @param nation The name of the nation to log in to.
+     * @param password The password for the nation.
+     * @returns A Promise that resolves to true if login is successful, false otherwise.
+     */
     public async login(
         nation: string,
         password: string,
@@ -132,12 +146,22 @@ class NSScript {
         return false;
     }
 
+    /**
+     * Re-authenticates the current session by fetching the region page
+     * for RWBY, getting the CHK and localid values from the response.
+     */
     public async reAuthenticate(): Promise<void> {
         await this.getNsHtmlPage("page=display_region", {
             "region": "rwby",
         });
     }
 
+    /**
+     * Attempts to move the current nation to a different region.
+     * @param region The name of the region to move to.
+     * @param password Optional password for the region.
+     * @returns A Promise that resolves to true if the move is successful, false otherwise.
+     */
     public async moveToRegion(region: string, password?: string): Promise<boolean> {
         let payload: MoveRegionFormData = {
             "region_name": region,
@@ -154,6 +178,11 @@ class NSScript {
         return false;
     }
 
+    /**
+     * Attempts to apply to or reapply to the World Assembly.
+     * @param reapply Whether to reapply to the World Assembly.
+     * @returns A Promise that resolves to true if the application is successful, false otherwise.
+     */
     public async applyToWorldAssembly(reapply?: boolean): Promise<boolean> {
         let payload: ApplyToWorldAssemblyFormData;
         if (reapply) {
