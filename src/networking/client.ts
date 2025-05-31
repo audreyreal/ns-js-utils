@@ -132,6 +132,12 @@ class NSScript {
         return false;
     }
 
+    public async reAuthenticate(): Promise<void> {
+        await this.getNsHtmlPage("page=display_region", {
+            "region": "rwby",
+        });
+    }
+
     public async moveToRegion(region: string, password?: string): Promise<boolean> {
         let payload: MoveRegionFormData = {
             "region_name": region,
@@ -148,7 +154,7 @@ class NSScript {
         return false;
     }
 
-    public async applyToWorldAssembly(reapply?: boolean) {
+    public async applyToWorldAssembly(reapply?: boolean): Promise<boolean> {
         let payload: ApplyToWorldAssemblyFormData = {
             "action": "join_UN"
         }
