@@ -155,13 +155,17 @@ class NSScript {
     }
 
     public async applyToWorldAssembly(reapply?: boolean): Promise<boolean> {
-        let payload: ApplyToWorldAssemblyFormData = {
-            "action": "join_UN"
-        }
+        let payload: ApplyToWorldAssemblyFormData;
         if (reapply) {
-            payload.resend = "1";
+            payload = {
+                action: "join_UN",
+                resend: "1"
+            };
         } else {
-            payload.submit = "1";
+            payload = {
+                action: "join_UN",
+                submit: "1"
+            };
         }
 
         const text = await this.getNsHtmlPage("page=UN_Status", payload);
