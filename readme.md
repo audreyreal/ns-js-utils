@@ -6,4 +6,4 @@ include it in a @require line in the script header
 ```
 ## docs
 functions from
-https://audreyreal.github.io/ns-js-utils/
+https://audreyreal.github.io/nsdotjs/
