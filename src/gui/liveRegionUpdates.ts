@@ -49,6 +49,12 @@ if (typeof window !== 'undefined') {
                 if (newDelegateElement && oldDelegateElement) {
                     oldDelegateElement.replaceWith(newDelegateElement);
                 }
+                // replace the elected time with the new delegate's elected time
+                const electedTimeElement = parsed_event.querySelector('time');
+                // replace the time element in the DOM with the new one
+                if (electedTimeElement) {
+                    oldDelegateElementContainer?.replaceChild(electedTimeElement, oldDelegateElementContainer.querySelector('time') || document.createElement('time'));
+                }
             }   
             // check if the region updated
             if (data.str.includes(' updated.')) {
