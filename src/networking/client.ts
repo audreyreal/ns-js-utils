@@ -180,7 +180,7 @@ class NSScript {
 
     /**
      * Attempts to apply to or reapply to the World Assembly.
-     * @param reapply Whether to reapply to the World Assembly.
+     * @param reapply Whether to reapply to the World Assembly if you've already recently applied
      * @returns A Promise that resolves to true if the application is successful, false otherwise.
      */
     public async applyToWorldAssembly(reapply?: boolean): Promise<boolean> {
@@ -202,6 +202,39 @@ class NSScript {
             return true;
         }
         console.error("Failed to apply to World Assembly");
+        return false;
+    }
+
+    /**
+     * Joins the World Assembly with the specified nation and appId.
+     *
+     * @public
+     * @async
+     * @param {string} nation the name of the nation to join the World Assembly with
+     * @param {string} appId the application ID to use for the join request
+     * @returns {Promise<boolean>} 
+     */
+    public async joinWorldAssembly(nation:string, appId:string): Promise<boolean> {
+        const text = await this.getNsHtmlPage("cgi-bin/", {
+            "nation": nation,
+            "appid": appId.trim(),
+        });
+        if (text.includes("You have joined the World Assembly!")) {
+            return true;
+        }
+        console.error("Failed to join World Assembly");
+        return false;
+    }
+
+    public async resignWorldAssembly(): Promise<boolean> {
+        const text = await this.getNsHtmlPage("page=UN_Status", {
+            "action": "leave_UN",
+            "submit": "1",
+        });
+        if (text.includes("From this moment forward, your nation is on its own.")) {
+            return true;
+        }
+        console.error("Failed to resign from World Assembly");
         return false;
     }
 }
