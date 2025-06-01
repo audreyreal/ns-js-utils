@@ -4,25 +4,6 @@ type EventData = {
     htmlStr: string;
 }
 
-// this function was stolen from reliant :3 thank you paul haku
-function timeAgo(unixTimestamp: number): string {
-    const now = Date.now();
-    const providedTime = unixTimestamp * 1000; // Convert to milliseconds
-    const difference = Math.floor((now - providedTime) / 1000); // Difference in seconds
-
-    if (difference <= 59) {
-        return 'Seconds ago';
-    } else if (difference < 3600) {
-        const minutes = Math.floor(difference / 60);
-        return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
-    } else {
-        const hours = Math.floor(difference / 3600);
-        return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-    }
-}
-
-// this needs refactoring someday, this is a mess
-
 // check if running in browser
 if (typeof window !== 'undefined') {
     // check if there's a div with id 'regioncontent
@@ -58,17 +39,22 @@ if (typeof window !== 'undefined') {
             }   
             // check if the region updated
             if (data.str.includes(' updated.')) {
-                // get the datetime parameter from the html string using a regex
-                const datetime = data.htmlStr.match(/datetime="([^"]+)"/);
-                // get the epoch time from the html string using a regex
-                const epoch = data.htmlStr.match(/epoch="([^"]+)"/);
-                // modify the DOM with the new last wa update time
-                if (datetime && epoch) {
+                // Parse the HTML content
+                const parsedUpdate = parseHtml(data.htmlStr);
+                // Find the time element in the parsed update
+                const updateTimeElement = parsedUpdate.querySelector('time');
+                
+                if (updateTimeElement) {
+                    const datetime = updateTimeElement.getAttribute('datetime');
+                    const epoch = updateTimeElement.getAttribute('epoch');
+                    const timeText = updateTimeElement.textContent;
+                    
+                    // Update the DOM element
                     const lastUpdateElement = document.getElementsByTagName('time')[0];
-                    if (lastUpdateElement) {
-                        lastUpdateElement.setAttribute('datetime', datetime[1]);
-                        lastUpdateElement.setAttribute('epoch', epoch[1]);
-                        lastUpdateElement.textContent = timeAgo(parseInt(epoch[1]));
+                    if (lastUpdateElement && datetime && epoch && timeText) {
+                        lastUpdateElement.setAttribute('datetime', datetime);
+                        lastUpdateElement.setAttribute('epoch', epoch);
+                        lastUpdateElement.textContent = timeText;
                     }
                 }
             }
