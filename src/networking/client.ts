@@ -24,11 +24,13 @@ class NSScript {
      */
     public async makeNsHtmlRequest(
         pagePath: string,
-        payload?: Record<string, string | number | boolean>
+        payload?: Record<string, string | number | boolean>,
+        followRedirects: boolean = true
     ): Promise<Response> {
         if (this.isHtmlRequestInProgress) {
             return Promise.reject(new Error("Simultaneous request denied: Another request is already in progress."));
         }
+
 
         this.isHtmlRequestInProgress = true;
 
@@ -37,6 +39,7 @@ class NSScript {
             (btn as HTMLButtonElement).disabled = true;
         });
         try {
+            this.statusBubble.info(`Loading: ${pagePath}...`);
             const baseUrl = "https://www.nationstates.net/";
 
             // Construct the value for the 'script' parameter
@@ -81,6 +84,7 @@ class NSScript {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: requestParams.toString(),
+                redirect: followRedirects ? 'follow' : 'manual',
             });
             return response;
         } finally {
@@ -105,7 +109,6 @@ class NSScript {
         pagePath: string,
         payload?: Record<string, string | number | boolean>
     ): Promise<String> {
-        this.statusBubble.info(`Loading: ${pagePath}...`);
         const response = await this.makeNsHtmlRequest(pagePath, payload);
         if (!response.ok) {
             throw new Error(`Failed to fetch page: ${response.statusText}`);
@@ -159,6 +162,27 @@ class NSScript {
             "region": "rwby",
         });
         this.statusBubble.success(`Re-authenticated`);
+    }
+
+    /**
+     * Attempts to create a new nation in the specified region.
+     * @param nationName The name of the nation to create.
+     * @param password Optional password for the nation.
+     * @returns A Promise that resolves to true if the creation is successful, false otherwise.
+     */
+    public async restoreNation(nation: string, password: string): Promise<boolean> {
+        const response = await this.makeNsHtmlRequest("", {
+            "logging_in": "1",
+            "restore_password": password,
+            "restore_nation": "1",
+            "nation": nation
+        }, false);
+        if (response.status === 302){
+            this.statusBubble.success(`Successfully restored nation: ${prettify(nation)}\nYou need to re-authenticate to perform actions on this nation.`);
+            return true;
+        }
+        this.statusBubble.warn('Failed to restore nation: ' + prettify(nation));
+        return false;
     }
 
     /**
@@ -221,7 +245,7 @@ class NSScript {
      * @param {string} appId the application ID to use for the join request
      * @returns {Promise<boolean>} 
      */
-    public async joinWorldAssembly(nation:string, appId:string): Promise<boolean> {
+    public async joinWorldAssembly(nation: string, appId: string): Promise<boolean> {
         const text = await this.getNsHtmlPage("cgi-bin/", {
             "nation": nation,
             "appid": appId.trim(),
