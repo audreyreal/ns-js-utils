@@ -177,7 +177,7 @@ class NSScript {
             "restore_nation": "1",
             "nation": nation
         }, false);
-        if (response.status === 302){
+        if (response.status === 302) {
             this.statusBubble.success(`Successfully restored nation: ${prettify(nation)}\nYou need to re-authenticate to perform actions on this nation.`);
             return true;
         }

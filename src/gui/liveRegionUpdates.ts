@@ -9,8 +9,9 @@ if (typeof window !== 'undefined') {
     // check if there's a div with id 'regioncontent
     let regioncontent = document.getElementById('regioncontent');
     if (regioncontent) {
-        // get the region name through the first h1 element's text content
-        const regionName = regioncontent.querySelector('h1')?.textContent?.trim();
+        // get the region name from h1 with class "regiontitle"
+        let regionName = document.querySelector('h1.regiontitle')?.textContent?.trim();
+        console.log(`Starting live updates for region: ${regionName}`);
         // start an SSE listener
         const eventSource = new EventSource(`https://www.nationstates.net/api/region:${canonicalize(regionName)}`);
         eventSource.onmessage = function(event) {
