@@ -2,6 +2,7 @@ class NSScript {
     private scriptName: string;
     private scriptVersion: string;
     private scriptAuthor: string;
+    public statusBubble: StatusBubble;
     public currentUser: string;
 
     private isHtmlRequestInProgress: boolean = false;
@@ -11,6 +12,7 @@ class NSScript {
         this.scriptVersion = version;
         this.scriptAuthor = author;
         this.currentUser = user;
+        this.statusBubble = StatusBubble.getInstance();
     }
 
     /**
@@ -103,6 +105,7 @@ class NSScript {
         pagePath: string,
         payload?: Record<string, string | number | boolean>
     ): Promise<String> {
+        this.statusBubble.info(`Loading: ${pagePath}...`);
         const response = await this.makeNsHtmlRequest(pagePath, payload);
         if (!response.ok) {
             throw new Error(`Failed to fetch page: ${response.statusText}`);
@@ -140,9 +143,10 @@ class NSScript {
         const re = /(?<=Move )(.*?)(?= to RWBY!)/; // This regex captures the nation name in the "Move [Nation] to RWBY!" button
         const match = text.match(re);
         if (match && canonicalize(match[0]) === canonNation) { // Check if the nation name in the button matches the input nation
-            return true
+            this.statusBubble.success(`Logged in to nation: ${prettify(nation)}`);
+            return true;
         }
-        console.error("Failed to login to nation:", nation);
+        this.statusBubble.warn(`Failed to log in to nation: ${prettify(nation)}`);
         return false;
     }
 
@@ -154,6 +158,7 @@ class NSScript {
         await this.getNsHtmlPage("page=display_region", {
             "region": "rwby",
         });
+        this.statusBubble.success(`Re-authenticated`);
     }
 
     /**
@@ -172,9 +177,10 @@ class NSScript {
         }
         const text = await this.getNsHtmlPage("page=change_region", payload);
         if (text.includes("Success!")) {
+            this.statusBubble.success(`Moved to region: ${prettify(region)}`);
             return true;
         }
-        console.error("Failed to move to region:", region);
+        this.statusBubble.warn(`Failed to move to region: ${prettify(region)}`);
         return false;
     }
 
@@ -199,9 +205,10 @@ class NSScript {
 
         const text = await this.getNsHtmlPage("page=UN_Status", payload);
         if (text.includes("Your application to join the World Assembly has been received!")) {
+            this.statusBubble.success("Applied to World Assembly");
             return true;
         }
-        console.error("Failed to apply to World Assembly");
+        this.statusBubble.warn("Failed to apply to World Assembly");
         return false;
     }
 
@@ -219,10 +226,11 @@ class NSScript {
             "nation": nation,
             "appid": appId.trim(),
         });
-        if (text.includes("You have joined the World Assembly!")) {
+        if (text.includes("Welcome to the World Assembly, new member ")) {
+            this.statusBubble.success(`Joined World Assembly as ${prettify(nation)}`);
             return true;
         }
-        console.error("Failed to join World Assembly");
+        this.statusBubble.warn("Failed to join World Assembly");
         return false;
     }
 
@@ -232,9 +240,10 @@ class NSScript {
             "submit": "1",
         });
         if (text.includes("From this moment forward, your nation is on its own.")) {
+            this.statusBubble.success("Resigned from World Assembly");
             return true;
         }
-        console.error("Failed to resign from World Assembly");
+        this.statusBubble.warn("Failed to resign from World Assembly");
         return false;
     }
 }
