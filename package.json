@@ -1,12 +1,21 @@
 {
-  "name": "ns-js-utils",
+  "name": "nsdotjs",
   "version": "1.0.0",
+  "module": "src/nsdotjs.ts",
   "devDependencies": {
-    "typedoc-github-theme": "^0.3.0",
+    "@biomejs/biome": "1.9.4",
+    "@types/bun": "latest",
+    "bun": "^1.1.0",
+    "typedoc-material-theme": "^1.4.0",
     "typescript": "^5.8.3"
   },
+  "private": false,
   "scripts": {
-    "build": "tsc",
-    "build-docs": "typedoc --entryPointStrategy Expand src --out docs --plugin typedoc-github-theme"
+    "build": "tsc && bun build src/nsdotjs.ts --outdir dist --target browser --minify",
+    "build-docs": "typedoc src/nsdotjs.ts --out docs --plugin typedoc-material-theme"
+  },
+  "type": "module",
+  "dependencies": {
+    "idb-keyval": "^6.2.2"
   }
 }

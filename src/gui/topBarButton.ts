@@ -1,3 +1,6 @@
+import { detectNationStatesTheme } from "./identifyTheme";
+import { Icon, TopBarButtonPosition } from "./types";
+
 /**
  * Adds a button to the top bar of the NationStates interface, detecting the correct theme and position.
  *
@@ -10,7 +13,7 @@
  * @param position Where to place the button in the top bar: "left" or "right".
  * @returns The created button element (HTMLDivElement) or null if a required container element is not found.
  */
-function addTopBarButton(
+export function addTopBarButton(
     text: string,
     iconClass: Icon,
     onClick: () => void,

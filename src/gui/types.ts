@@ -1,8 +1,7 @@
-
 /**
  * Type representing the possible NationStates themes.
  */
-type NationStatesTheme =
+export type NationStatesTheme =
     | "Antiquity"
     | "Century"
     | "Rift"
@@ -13,14 +12,14 @@ type NationStatesTheme =
 /**
  * Represents the possible positions of top bar buttons.
  */
-type TopBarButtonPosition = "left" | "right";
+export type TopBarButtonPosition = "left" | "right";
 
 /**
  * Represents the possible icons available for the NationStates interface.
  * Comprehensive list of all icons can be found at: https://www.nationstates.net/page=dispatch/id=1625339
  * the codes (e.g. e83c, e83e) underneath the names should be ignored
  */
-type Icon =
+export type Icon =
     | "align-left"
     | "chat-empty"
     | "login"

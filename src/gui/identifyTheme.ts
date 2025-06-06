@@ -1,10 +1,12 @@
+import { NationStatesTheme } from "./types";
+
 /**
  * Analyzes the provided HTML content to detect the active NationStates theme.
  *
  * @param htmlContent - A string containing the HTML content of a NationStates page. Likely document.documentElement.innerHTML
  * @returns The detected NationStatesTheme.
  */
-function detectNationStatesTheme(htmlContent: string): NationStatesTheme {
+export function detectNationStatesTheme(htmlContent: string): NationStatesTheme {
     // Check for Mobile theme (most specific CSS file name)
     // Mobile theme includes a stylesheet like: /ns.m_v1740624640.css
     if (htmlContent.includes('/ns.m_')) {

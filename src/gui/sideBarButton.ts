@@ -1,3 +1,7 @@
+
+import { detectNationStatesTheme } from "./identifyTheme";
+import { Icon } from "./types";
+
 /**
  * Adds a button to the sidebar panel of the NationStates interface.
  *
@@ -10,7 +14,7 @@
  * @param href The URL the button should link to. Defaults to "#" for action-only buttons.
  * @returns The created list item element (HTMLLIElement) or null if a required container element is not found.
  */
-function addSidebarButton(
+export function addSidebarButton(
     text: string,
     iconClass: Icon,
     onClick: () => void,

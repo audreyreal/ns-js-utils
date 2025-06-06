@@ -3,7 +3,7 @@
  * @param html The HTML string to parse
  * @returns The parsed Document
  */
-function parseHtml(html: string): Document {
+export function parseHtml(html: string): Document {
     const parser = new DOMParser();
     return parser.parseFromString(html, 'text/html');
 }
@@ -12,7 +12,7 @@ function parseHtml(html: string): Document {
  * Canonicalizes a string by lowering its case and trimming whitespace and replacing spaces with underscores.
  * @param str The string to canonicalize
  */
-function canonicalize(str: string | undefined): string | undefined {
+export function canonicalize(str: string | undefined): string | undefined {
     if (!str) return undefined; // Handle undefined input
     return str
         .toLowerCase()
@@ -24,7 +24,7 @@ function canonicalize(str: string | undefined): string | undefined {
  * Prettifies a string for display by replacing underscores with spaces and capitalizing the first letter of each word except for certain small words.
  * @param str The string to prettify
  */
-function prettify(str: string): string {
+export function prettify(str: string): string {
     return str
         .replace(/_/g, ' ') // Replace underscores with spaces
         .replace(/\b(a|an|the|and|but|or|for|nor|on|at|to|in)\b/gi, (match) => match.toLowerCase())

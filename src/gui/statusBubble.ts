@@ -1,4 +1,16 @@
-class StatusBubble {
+/**
+ * A singleton status bubble UI component for displaying messages with different color states.
+ * 
+ * @remarks
+ * This class creates a fixed-position div element that can be used to show status messages
+ * with different color indicators (blue, yellow, red) or custom colors.
+ * 
+ * @example
+ * const statusBubble = StatusBubble.getInstance();
+ * statusBubble.success("Operation completed successfully");
+ * statusBubble.warn("Warning: Something might be wrong");
+ */
+export class StatusBubble {
     private static instance: StatusBubble | null = null;
     private element: HTMLDivElement;
 

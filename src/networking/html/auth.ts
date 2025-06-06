@@ -31,7 +31,7 @@ function extractLocalid(doc: Document): string | null {
  * Stores nation, chk, and localid from the given Document in localStorage.
  * @param doc The Document to extract auth data from
  */
-function storeAuth(doc: Document): void {
+export default function storeAuth(doc: Document): void {
     const nation = extractNation(doc);
     const chk = extractChk(doc);
     const localid = extractLocalid(doc);
@@ -61,6 +61,8 @@ function storeAuth(doc: Document): void {
     }
 }
 
-window.addEventListener('load', () => {
-    storeAuth(document);
-});
+if (typeof window !== 'undefined') {
+    window.addEventListener('load', () => {
+        storeAuth(document);
+    });
+}
