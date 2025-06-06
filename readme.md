@@ -20,3 +20,9 @@ https://audreyreal.github.io/nsdotjs/
 - [X] migrate to using https://github.com/jakearchibald/idb-keyval for storage of things like main nation
 - [ ] integrated puppet manager?
 - [ ] add a default user input handler in the form of awaiting a spacebar press
+
+## how to dev
+
+1. clone the repo
+2. run `npm install`
+3. run `npm run build`

@@ -1,21 +1,22 @@
 {
-  "name": "nsdotjs",
-  "version": "1.0.0",
-  "module": "src/nsdotjs.ts",
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/bun": "latest",
-    "bun": "^1.1.0",
-    "typedoc-material-theme": "^1.4.0",
-    "typescript": "^5.8.3"
-  },
-  "private": false,
-  "scripts": {
-    "build": "tsc && bun build src/nsdotjs.ts --outdir dist --target browser --minify",
-    "build-docs": "typedoc src/nsdotjs.ts --out docs --plugin typedoc-material-theme"
-  },
-  "type": "module",
-  "dependencies": {
-    "idb-keyval": "^6.2.2"
-  }
+	"name": "nsdotjs",
+	"version": "1.0.0",
+	"module": "src/nsdotjs.ts",
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/bun": "latest",
+		"bun": "^1.1.0",
+		"typedoc-material-theme": "^1.4.0",
+		"typescript": "^5.8.3"
+	},
+	"private": false,
+	"scripts": {
+		"build": "tsc && bun build src/nsdotjs.ts --outdir dist --target browser --minify",
+		"build-docs": "typedoc src/nsdotjs.ts --out docs --plugin typedoc-material-theme",
+		"lint": "biome check"
+	},
+	"type": "module",
+	"dependencies": {
+		"idb-keyval": "^6.2.2"
+	}
 }

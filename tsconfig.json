@@ -1,20 +1,17 @@
 {
-  "compilerOptions": {
-    "target": "ES2024",     // Compile to JavaScript version compatible with modern browsers
-    "module": "ESNext",         // Changed to ESNext for modern module support
-    "outDir": "./dist",         // Output to a 'dist' directory
-    "rootDir": "./src",         // Source files are in 'src'
-    "strict": true,          // Enable all strict type-checking options
-    "esModuleInterop": true, // Enables interoperability between CommonJS and ES Modules
-    "skipLibCheck": true,    // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true,
-    "declaration": true,
-    "moduleResolution": "bundler"
-    // "sourceMap": true,    // Uncomment if you want source maps for debugging
-    // "removeComments": true // Uncomment to remove comments from the output JS
-  },
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+	"compilerOptions": {
+		"target": "ES2024", // Compile to JavaScript version compatible with modern browsers
+		"module": "ESNext", // Changed to ESNext for modern module support
+		"outDir": "./dist", // Output to a 'dist' directory
+		"rootDir": "./src", // Source files are in 'src'
+		"strict": true, // Enable all strict type-checking options
+		"esModuleInterop": true, // Enables interoperability between CommonJS and ES Modules
+		"skipLibCheck": true, // Skip type checking of declaration files
+		"forceConsistentCasingInFileNames": true,
+		"declaration": true,
+		"moduleResolution": "bundler"
+		// "sourceMap": true,    // Uncomment if you want source maps for debugging
+		// "removeComments": true // Uncomment to remove comments from the output JS
+	},
+	"exclude": ["dist", "node_modules"]
 }

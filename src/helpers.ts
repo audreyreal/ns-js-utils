@@ -4,8 +4,8 @@
  * @returns The parsed Document
  */
 export function parseHtml(html: string): Document {
-    const parser = new DOMParser();
-    return parser.parseFromString(html, 'text/html');
+	const parser = new DOMParser();
+	return parser.parseFromString(html, "text/html");
 }
 
 /**
@@ -13,11 +13,8 @@ export function parseHtml(html: string): Document {
  * @param str The string to canonicalize
  */
 export function canonicalize(str: string | undefined): string | undefined {
-    if (!str) return undefined; // Handle undefined input
-    return str
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, '_'); // Replace spaces with underscores
+	if (!str) return undefined; // Handle undefined input
+	return str.toLowerCase().trim().replace(/\s+/g, "_"); // Replace spaces with underscores
 }
 
 /**
@@ -25,8 +22,10 @@ export function canonicalize(str: string | undefined): string | undefined {
  * @param str The string to prettify
  */
 export function prettify(str: string): string {
-    return str
-        .replace(/_/g, ' ') // Replace underscores with spaces
-        .replace(/\b(a|an|the|and|but|or|for|nor|on|at|to|in)\b/gi, (match) => match.toLowerCase())
-        .replace(/\b\w/g, (match) => match.toUpperCase());
+	return str
+		.replace(/_/g, " ") // Replace underscores with spaces
+		.replace(/\b(a|an|the|and|but|or|for|nor|on|at|to|in)\b/gi, (match) =>
+			match.toLowerCase(),
+		)
+		.replace(/\b\w/g, (match) => match.toUpperCase());
 }

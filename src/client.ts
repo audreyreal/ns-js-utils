@@ -1,10 +1,10 @@
 import { get, set } from "idb-keyval";
 import { StatusBubble } from "./gui/statusBubble";
-import { parseHtml, canonicalize, prettify } from "./helpers";
+import { canonicalize, parseHtml, prettify } from "./helpers";
 import storeAuth from "./networking/html/auth";
 import type {
-	MoveRegionFormData,
 	ApplyToWorldAssemblyFormData,
+	MoveRegionFormData,
 } from "./networking/html/types";
 
 /**
