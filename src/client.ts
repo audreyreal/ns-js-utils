@@ -2,10 +2,10 @@ import { get, set } from "idb-keyval";
 import { StatusBubble } from "./gui/statusBubble";
 import { parseHtml } from "./helpers";
 import storeAuth from "./networking/html/auth";
-import waitForSpace from "./networking/html/handlers/userInput";
 import * as nation from "./networking/html/handlers/nation";
 import * as region from "./networking/html/handlers/region";
 import * as simultaneity from "./networking/html/handlers/simultaneity";
+import waitForSpace from "./networking/html/handlers/userInput";
 import * as wa from "./networking/html/handlers/worldAssembly";
 
 /**
@@ -34,7 +34,13 @@ export class NSScript {
 	 * @param author The author of the script
 	 * @param user The current user of the script
 	 */
-	constructor(name: string, version: string, author: string, user: string, userInputHandler: () => Promise<void> = waitForSpace) {
+	constructor(
+		name: string,
+		version: string,
+		author: string,
+		user: string,
+		userInputHandler: () => Promise<void> = waitForSpace,
+	) {
 		this.scriptName = name;
 		this.scriptVersion = version;
 		this.scriptAuthor = author;
