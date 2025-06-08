@@ -2,10 +2,10 @@ import { get, set } from "idb-keyval";
 import { StatusBubble } from "./gui/statusBubble";
 import { canonicalize, parseHtml, prettify } from "./helpers";
 import storeAuth from "./networking/html/auth";
-import type {
-	ApplyToWorldAssemblyFormData,
-	MoveRegionFormData,
-} from "./networking/html/types";
+import * as nation from "./networking/html/handlers/nation";
+import * as region from "./networking/html/handlers/region";
+import * as simultaneity from "./networking/html/handlers/simultaneity";
+import * as wa from "./networking/html/handlers/worldAssembly";
 
 /**
  * Represents a script for interacting with NationStates, providing methods for authentication,
@@ -22,7 +22,7 @@ export class NSScript {
 	public statusBubble: StatusBubble;
 	public currentUser: string;
 
-	private isHtmlRequestInProgress = false;
+	public isHtmlRequestInProgress = false;
 
 	/**
 	 * Initializes a new NSScript instance with script metadata and current user information.
@@ -48,7 +48,7 @@ export class NSScript {
 	 * @returns A Promise that resolves when the value is successfully stored
 	 */
 	public async set(key: string, value: unknown): Promise<void> {
-		await set(key, value);
+		return await set(key, value);
 	}
 
 	/**
@@ -73,22 +73,13 @@ export class NSScript {
 		payload?: Record<string, string | number | boolean>,
 		followRedirects = true,
 	): Promise<Response> {
-		if (this.isHtmlRequestInProgress) {
+		if (!simultaneity.handleCheck(this)) {
 			return Promise.reject(
-				new Error(
-					"Simultaneous request denied: Another request is already in progress.",
-				),
+				new Error("Simultaneity check failed. Please try again."),
 			);
 		}
 
-		this.isHtmlRequestInProgress = true;
-
-		// Disable all submit buttons to enforce simultaneity
-		for (const btn of document.querySelectorAll<HTMLButtonElement>(
-			'button[type="submit"]',
-		)) {
-			btn.disabled = true;
-		}
+		simultaneity.handleLock(this); // Locks submit buttons and sets the request in progress state
 		try {
 			this.statusBubble.info(`Loading: ${pagePath}...`);
 			const baseUrl = "https://www.nationstates.net/";
@@ -142,14 +133,7 @@ export class NSScript {
 			});
 			return response;
 		} finally {
-			this.isHtmlRequestInProgress = false;
-
-			// Re-enable all submit buttons
-			for (const btn of document.querySelectorAll<HTMLButtonElement>(
-				'button[type="submit"]',
-			)) {
-				btn.disabled = false;
-			}
+			simultaneity.handleUnlock(this); // Unlocks submit buttons and clears the request in progress state
 		}
 	}
 
@@ -192,25 +176,7 @@ export class NSScript {
 	 * @returns A Promise that resolves to true if login is successful, false otherwise.
 	 */
 	public async login(nationName: string, password: string): Promise<boolean> {
-		const text = await this.getNsHtmlPage("page=display_region", {
-			region: "rwby",
-			nation: nationName,
-			password: password,
-			logging_in: "1",
-			submit: "Login",
-		});
-		const canonNation = canonicalize(nationName);
-		const re = /(?<=Move )(.*?)(?= to RWBY!)/; // This regex captures the nation name in the "Move [Nation] to RWBY!" button
-		const match = text.match(re);
-		if (match && canonicalize(match[0]) === canonNation) {
-			// Check if the nation name in the button matches the input nation
-			this.statusBubble.success(`Logged in to nation: ${prettify(nationName)}`);
-			return true;
-		}
-		this.statusBubble.warn(
-			`Failed to log in to nation: ${prettify(nationName)}`,
-		);
-		return false;
+		return nation.handleLogin(this, nationName, password);
 	}
 
 	/**
@@ -234,24 +200,7 @@ export class NSScript {
 		nationName: string,
 		password: string,
 	): Promise<boolean> {
-		const response = await this.makeNsHtmlRequest(
-			"",
-			{
-				logging_in: "1",
-				restore_password: password,
-				restore_nation: "1",
-				nation: nationName,
-			},
-			false,
-		);
-		if (response.status === 302) {
-			this.statusBubble.success(
-				`Successfully restored nation: ${prettify(nationName)}\nYou need to re-authenticate to perform actions on this nation.`,
-			);
-			return true;
-		}
-		this.statusBubble.warn(`Failed to restore nation: ${prettify(nationName)}`);
-		return false;
+		return nation.handleRestore(this, nationName, password);
 	}
 
 	/**
@@ -264,20 +213,7 @@ export class NSScript {
 		regionName: string,
 		password?: string,
 	): Promise<boolean> {
-		const payload: MoveRegionFormData = {
-			region_name: regionName,
-			move_region: "1",
-		};
-		if (password) {
-			payload.password = password;
-		}
-		const text = await this.getNsHtmlPage("page=change_region", payload);
-		if (text.includes("Success!")) {
-			this.statusBubble.success(`Moved to region: ${prettify(regionName)}`);
-			return true;
-		}
-		this.statusBubble.warn(`Failed to move to region: ${prettify(regionName)}`);
-		return false;
+		return region.handleMove(this, regionName, password);
 	}
 
 	/**
@@ -286,30 +222,7 @@ export class NSScript {
 	 * @returns A Promise that resolves to true if the application is successful, false otherwise.
 	 */
 	public async applyToWorldAssembly(reapply?: boolean): Promise<boolean> {
-		let payload: ApplyToWorldAssemblyFormData;
-		if (reapply) {
-			payload = {
-				action: "join_UN",
-				resend: "1",
-			};
-		} else {
-			payload = {
-				action: "join_UN",
-				submit: "1",
-			};
-		}
-
-		const text = await this.getNsHtmlPage("page=UN_Status", payload);
-		if (
-			text.includes(
-				"Your application to join the World Assembly has been received!",
-			)
-		) {
-			this.statusBubble.success("Applied to World Assembly");
-			return true;
-		}
-		this.statusBubble.warn("Failed to apply to World Assembly");
-		return false;
+		return wa.handleApply(this, reapply);
 	}
 
 	/**
@@ -322,18 +235,7 @@ export class NSScript {
 		nationName: string,
 		appId: string,
 	): Promise<boolean> {
-		const text = await this.getNsHtmlPage("cgi-bin/", {
-			nation: nationName,
-			appid: appId.trim(),
-		});
-		if (text.includes("Welcome to the World Assembly, new member ")) {
-			this.statusBubble.success(
-				`Joined World Assembly as ${prettify(nationName)}`,
-			);
-			return true;
-		}
-		this.statusBubble.warn("Failed to join World Assembly");
-		return false;
+		return wa.handleJoin(this, nationName, appId);
 	}
 
 	/**
@@ -341,15 +243,6 @@ export class NSScript {
 	 * @returns A Promise that resolves to true if the resignation is successful, false otherwise.
 	 */
 	public async resignWorldAssembly(): Promise<boolean> {
-		const text = await this.getNsHtmlPage("page=UN_Status", {
-			action: "leave_UN",
-			submit: "1",
-		});
-		if (text.includes("From this moment forward, your nation is on its own.")) {
-			this.statusBubble.success("Resigned from World Assembly");
-			return true;
-		}
-		this.statusBubble.warn("Failed to resign from World Assembly");
-		return false;
+		return wa.handleResign(this);
 	}
 }
