@@ -1,7 +1,8 @@
 import { get, set } from "idb-keyval";
 import { StatusBubble } from "./gui/statusBubble";
-import { canonicalize, parseHtml, prettify } from "./helpers";
+import { parseHtml } from "./helpers";
 import storeAuth from "./networking/html/auth";
+import waitForSpace from "./networking/html/handlers/userInput";
 import * as nation from "./networking/html/handlers/nation";
 import * as region from "./networking/html/handlers/region";
 import * as simultaneity from "./networking/html/handlers/simultaneity";
@@ -21,6 +22,7 @@ export class NSScript {
 	private scriptAuthor: string;
 	public statusBubble: StatusBubble;
 	public currentUser: string;
+	public userInputHandler: () => Promise<void> = waitForSpace; // Default user input handler
 
 	public isHtmlRequestInProgress = false;
 
@@ -32,12 +34,13 @@ export class NSScript {
 	 * @param author The author of the script
 	 * @param user The current user of the script
 	 */
-	constructor(name: string, version: string, author: string, user: string) {
+	constructor(name: string, version: string, author: string, user: string, userInputHandler: () => Promise<void> = waitForSpace) {
 		this.scriptName = name;
 		this.scriptVersion = version;
 		this.scriptAuthor = author;
 		this.currentUser = user;
 		this.statusBubble = StatusBubble.getInstance();
+		this.userInputHandler = userInputHandler;
 	}
 
 	/**
@@ -78,7 +81,8 @@ export class NSScript {
 				new Error("Simultaneity check failed. Please try again."),
 			);
 		}
-
+		// wait for user input before proceeding
+		await this.userInputHandler();
 		simultaneity.handleLock(this); // Locks submit buttons and sets the request in progress state
 		try {
 			this.statusBubble.info(`Loading: ${pagePath}...`);
