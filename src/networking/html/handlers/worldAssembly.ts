@@ -1,5 +1,5 @@
+import { type NSScript, prettify } from "../../../nsdotjs";
 import type { ApplyToWorldAssemblyFormData } from "../types";
-import { prettify, type NSScript } from "../../../nsdotjs";
 
 /**
  * Attempts to apply to or reapply to the World Assembly.

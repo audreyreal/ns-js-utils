@@ -1,4 +1,8 @@
-import { prettify, type NSScript, type MoveRegionFormData } from "../../../nsdotjs";
+import {
+	type MoveRegionFormData,
+	type NSScript,
+	prettify,
+} from "../../../nsdotjs";
 
 /**
  * Attempts to move the current nation to a different region.
@@ -8,22 +12,24 @@ import { prettify, type NSScript, type MoveRegionFormData } from "../../../nsdot
  * @returns A Promise that resolves to true if the move is successful, false otherwise.
  */
 export async function handleMove(
-    context: NSScript,
-    regionName: string,
-    password?: string,
+	context: NSScript,
+	regionName: string,
+	password?: string,
 ): Promise<boolean> {
-    const payload: MoveRegionFormData = {
-        region_name: regionName,
-        move_region: "1",
-    };
-    if (password) {
-        payload.password = password;
-    }
-    const text = await context.getNsHtmlPage("page=change_region", payload);
-    if (text.includes("Success!")) {
-        context.statusBubble.success(`Moved to region: ${prettify(regionName)}`);
-        return true;
-    }
-    context.statusBubble.warn(`Failed to move to region: ${prettify(regionName)}`);
-    return false;
+	const payload: MoveRegionFormData = {
+		region_name: regionName,
+		move_region: "1",
+	};
+	if (password) {
+		payload.password = password;
+	}
+	const text = await context.getNsHtmlPage("page=change_region", payload);
+	if (text.includes("Success!")) {
+		context.statusBubble.success(`Moved to region: ${prettify(regionName)}`);
+		return true;
+	}
+	context.statusBubble.warn(
+		`Failed to move to region: ${prettify(regionName)}`,
+	);
+	return false;
 }

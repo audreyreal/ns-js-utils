@@ -2,10 +2,10 @@ import { get, set } from "idb-keyval";
 import { StatusBubble } from "./gui/statusBubble";
 import { canonicalize, parseHtml, prettify } from "./helpers";
 import storeAuth from "./networking/html/auth";
-import * as wa from "./networking/html/handlers/worldAssembly";
-import * as region from "./networking/html/handlers/region";
 import * as nation from "./networking/html/handlers/nation";
+import * as region from "./networking/html/handlers/region";
 import * as simultaneity from "./networking/html/handlers/simultaneity";
+import * as wa from "./networking/html/handlers/worldAssembly";
 
 /**
  * Represents a script for interacting with NationStates, providing methods for authentication,
