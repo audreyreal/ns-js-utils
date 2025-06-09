@@ -250,6 +250,79 @@ export class NSScript {
 	}
 
 	/**
+	 * Attempts to change the World Factbook Entry for the current region.
+	 * @param wfe The new World Factbook Entry.
+	 * @returns A Promise that resolves to true if the change is successful, false otherwise.
+	 */
+	public async changeWFE(
+		wfe: string,
+	): Promise<boolean> {
+		return region.handleChangeWFE(this, wfe);
+	}
+
+	/**
+	 * Requests an embassy from the current region to the specified region.
+	 * @param regionName The name of the region to request an embassy from.
+	 * @returns A Promise that resolves to true if the request is successful, false otherwise.
+	 */
+	public async requestEmbassy(
+		regionName: string,
+	): Promise<boolean> {
+		return region.handleRequestEmbassy(this, regionName);
+	}
+
+	/**
+	 * Attempts to close an embassy with the specified region.
+	 * @param regionName The name of the region to close the embassy with.
+	 * @returns A Promise that resolves to true if the embassy is closed, false otherwise.
+	 */
+	public async burnEmbassy(
+		regionName: string,
+	): Promise<boolean> {
+		return region.handleCloseEmbassy(this, regionName);
+	}
+
+	/**
+	 * Attempts to abort an embassy that is currently being opened.
+	 * @param regionName The name of the region to abort the embassy opening with.
+	 * @returns A Promise that resolves to true if the embassy opening is aborted, false otherwise.
+	 */
+	public async abortEmbassyOpening(
+		regionName: string,
+	): Promise<boolean> {
+		return region.handleAbortEmbassy(this, regionName);
+	}
+
+	/**
+	 * Attempts to cancel an embassy closure.
+	 * @param regionName The name of the region to cancel the embassy closure with.
+	 * @returns A Promise that resolves to true if the embassy closure is canceled, false otherwise.
+	 */
+	public async cancelEmbassyClosure(
+		regionName: string,
+	): Promise<boolean> {
+		return region.handleCancelEmbassyClosure(this, regionName);
+	}
+
+	/**
+	 * Attempts to ban and eject a nation from the current region.
+	 * @param nationName The name of the nation to ban and eject.
+	 * @returns A Promise that resolves to true if the ban and eject is successful, false otherwise.
+	 */
+	public async banject(nationName: string): Promise<boolean> {
+		return region.handleBanject(this, nationName);
+	}
+
+	/**
+	 * Attempts to eject a nation from the current region.
+	 * @param nationName The name of the nation to ban and eject.
+	 * @returns A Promise that resolves to true if the ban and eject is successful, false otherwise.
+	 */
+	public async eject(nationName: string): Promise<boolean> {
+		return region.handleEject(this, nationName);
+	}
+
+	/**
 	 * Attempts to apply to or reapply to the World Assembly.
 	 * @param reapply Whether to reapply to the World Assembly if you've already recently applied
 	 * @returns A Promise that resolves to true if the application is successful, false otherwise.

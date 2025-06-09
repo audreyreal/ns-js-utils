@@ -144,7 +144,7 @@ export async function handleCancelEmbassyClosure(
 	return false;
 }
 
-export async function eject(
+export async function handleEject(
 	context: NSScript,
 	nationName: string,
 ): Promise<boolean> {
@@ -160,7 +160,7 @@ export async function eject(
 	return false;
 }
 
-export async function banject(
+export async function handleBanject(
 	context: NSScript,
 	nationName: string,
 ): Promise<boolean> {
