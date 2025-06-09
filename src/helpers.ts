@@ -12,8 +12,8 @@ export function parseHtml(html: string): Document {
  * Canonicalizes a string by lowering its case and trimming whitespace and replacing spaces with underscores.
  * @param str The string to canonicalize
  */
-export function canonicalize(str: string | undefined): string | undefined {
-	if (!str) return undefined; // Handle undefined input
+export function canonicalize(str: string | undefined): string {
+	if (!str) return ""
 	return str.toLowerCase().trim().replace(/\s+/g, "_"); // Replace spaces with underscores
 }
 

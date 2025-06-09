@@ -1,4 +1,4 @@
-import { type NSScript, prettify } from "../../../nsdotjs";
+import { type NSScript, prettify, canonicalize } from "../../../nsdotjs";
 import type { ApplyToWorldAssemblyFormData } from "../types";
 
 /**
@@ -79,5 +79,84 @@ export async function handleResign(context: NSScript): Promise<boolean> {
 		return true;
 	}
 	context.statusBubble.warn("Failed to resign from World Assembly");
+	return false;
+}
+
+/**
+ * Attempts to endorse a nation in the World Assembly.
+ * @param context The NSScript instance
+ * @param nationName The name of the nation to endorse.
+ * @returns A Promise that resolves to true if the endorsement is successful, false otherwise.
+ */
+export async function handleEndorse(
+	context: NSScript,
+	nationName: string,
+): Promise<boolean> {
+	const response = await context.makeNsHtmlRequest(
+		"cgi-bin/endorse.cgi",
+		{
+			nation: nationName,
+			action: "endorse",
+		},
+		false,
+	);
+	const location = response.headers.get("location") || "";
+
+	if (location.includes(`nation=${canonicalize(nationName)}`)) {
+		context.statusBubble.success(`Endorsed ${prettify(nationName)}`);
+		return true;
+	}
+	context.statusBubble.warn(`Failed to endorse ${prettify(nationName)}`);
+	return false;
+}
+
+/**
+ * Attempts to unendorse a nation in the World Assembly.
+ * @param context The NSScript instance
+ * @param nationName The name of the nation to unendorse.
+ * @returns A Promise that resolves to true if the unendorsement is successful, false otherwise.
+ */
+export async function handleUnendorse(
+	context: NSScript,
+	nationName: string,
+): Promise<boolean> {
+	const response = await context.makeNsHtmlRequest(
+		"cgi-bin/endorse.cgi",
+		{
+			nation: nationName,
+			action: "unendorse",
+		},
+		false,
+	);
+	const location = response.headers.get("location") || "";
+
+	if (location.includes(`nation=${canonicalize(nationName)}`)) {
+		context.statusBubble.success(`Unendorsed ${prettify(nationName)}`);
+		return true;
+	}
+	context.statusBubble.warn(`Failed to unendorse ${prettify(nationName)}`);
+	return false;
+}
+
+/**
+ * Handles voting in the World Assembly.
+ * @param context The NSScript instance
+ * @param council The council to vote in, either "ga" (General Assembly) or "sc" (Security Council).
+ * @param vote The type of vote, either "for" or "against".
+ * @returns A Promise that resolves to true if the vote is successful, false otherwise.
+ */
+export async function handleVote(
+	context: NSScript,
+	council: "ga" | "sc",
+	vote: "for" | "against",
+): Promise<boolean> {
+	const response = await context.getNsHtmlPage(`page=${council}`, {
+		vote: `Vote ${vote}`,
+	});
+	if (response.includes("Your vote has been lodged.")) {
+		context.statusBubble.success(`Voted ${vote} in ${council}`);
+		return true;
+	}
+	context.statusBubble.warn(`Failed to vote ${vote} in ${council}`);
 	return false;
 }

@@ -68,3 +68,5 @@ export async function handleLogin(
 	);
 	return false;
 }
+
+// TODO: add nation settings management and flag uploading

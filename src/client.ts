@@ -135,9 +135,6 @@ export class NSScript {
 			const response = await fetch(finalUrl, {
 				credentials: "include",
 				method: "POST",
-				headers: {
-					"Content-Type": "application/x-www-form-urlencoded",
-				},
 				body: requestParams.toString(),
 				redirect: followRedirects ? "follow" : "manual",
 			});
@@ -227,6 +224,32 @@ export class NSScript {
 	}
 
 	/**
+	 * Attempts to create a new region with the specified parameters.
+	 * @param regionName The name of the region to create.
+	 * @param wfe The World Factbook Entry for the region.
+	 * @param password Optional password for the region.
+	 * @param frontier Whether the region is a frontier region. Defaults to false.
+	 * @param executiveDelegate Whether the region has an executive delegate. Defaults to false.
+	 * @returns A Promise that resolves to true if the creation is successful, false otherwise.
+	 */
+	public async createRegion(
+		regionName: string,
+		wfe: string,
+		password = "",
+		frontier = false,
+		executiveDelegate = false,
+	): Promise<boolean> {
+		return region.handleCreate(
+			this,
+			regionName,
+			wfe,
+			password,
+			frontier,
+			executiveDelegate,
+		);
+	}
+
+	/**
 	 * Attempts to apply to or reapply to the World Assembly.
 	 * @param reapply Whether to reapply to the World Assembly if you've already recently applied
 	 * @returns A Promise that resolves to true if the application is successful, false otherwise.
@@ -255,4 +278,37 @@ export class NSScript {
 	public async resignWorldAssembly(): Promise<boolean> {
 		return wa.handleResign(this);
 	}
+
+	/**
+	 * Attempts to endorse a nation in the World Assembly.
+	 * @param nationName The name of the nation to endorse.
+	 * @returns A Promise that resolves to true if the endorsement is successful, false otherwise.
+	 */
+	public async endorseNation(nationName: string): Promise<boolean> {
+		return wa.handleEndorse(this, nationName);
+	}
+
+	/**
+	 * Attempts to unendorse a nation in the World Assembly.
+	 * @param nationName The name of the nation to unendorse.
+	 * @returns A Promise that resolves to true if the unendorsement is successful, false otherwise.
+	 */
+	public async unEndorseNation(nationName: string): Promise<boolean> {
+		return wa.handleUnendorse(this, nationName);
+	}
+
+	/**
+	 * Attempts to vote in the World Assembly.
+	 * @param council The council to vote in ("ga" for General Assembly, "sc" for Security Council).
+	 * @param vote The vote type ("for" or "against").
+	 * @returns A Promise that resolves to true if the vote is successful, false otherwise.
+	 */
+	public async waVote(
+		council: "ga" | "sc",
+		vote: "for" | "against",
+	): Promise<boolean> {
+		return wa.handleVote(this, council, vote);
+	}
+
+	// end WA functions
 }

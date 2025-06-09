@@ -11,11 +11,11 @@ https://audreyreal.github.io/nsdotjs/
 ## todo:
 - [ ] api client
 - [X] (slightly) better docs
-- [ ] more html site functions
+- [X] more html site functions
 - [ ] sse client
 - [X] migrate to a module exporting NSScript
 - [X] migrate to using a bundler+minifier (bun probably)
-- [ ] extract functions from NSScript
+- [X] extract functions from NSScript
 - [ ] make an easy way to create custom pages on page=blank
 - [X] migrate to using https://github.com/jakearchibald/idb-keyval for storage of things like main nation
 - [ ] integrated puppet manager?
