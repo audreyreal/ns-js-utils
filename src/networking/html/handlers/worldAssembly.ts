@@ -1,4 +1,4 @@
-import { type NSScript, prettify, canonicalize } from "../../../nsdotjs";
+import { type NSScript, canonicalize, prettify } from "../../../nsdotjs";
 import type { ApplyToWorldAssemblyFormData } from "../types";
 
 /**

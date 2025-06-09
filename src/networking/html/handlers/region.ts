@@ -1,7 +1,7 @@
 import {
-	canonicalize,
 	type MoveRegionFormData,
 	type NSScript,
+	canonicalize,
 	prettify,
 } from "../../../nsdotjs";
 
@@ -125,15 +125,22 @@ export async function handleAbortEmbassy(context: NSScript, target: string) {
 	return false;
 }
 
-export async function handleCancelEmbassyClosure(context: NSScript, target: string) {
+export async function handleCancelEmbassyClosure(
+	context: NSScript,
+	target: string,
+) {
 	const text = await context.getNsHtmlPage("page=region_control", {
 		cancelembassyclosureregion: target,
 	});
 	if (text.includes("Embassy closure order cancelled.")) {
-		context.statusBubble.success(`Cancelled embassy closure with ${prettify(target)}`);
+		context.statusBubble.success(
+			`Cancelled embassy closure with ${prettify(target)}`,
+		);
 		return true;
 	}
-	context.statusBubble.warn(`Failed to cancel embassy closure with ${prettify(target)}`);
+	context.statusBubble.warn(
+		`Failed to cancel embassy closure with ${prettify(target)}`,
+	);
 	return false;
 }
 
@@ -165,7 +172,9 @@ export async function banject(
 		context.statusBubble.success(`Banjected nation: ${prettify(nationName)}`);
 		return true;
 	}
-	context.statusBubble.warn(`Failed to banject nation: ${prettify(nationName)}`);
+	context.statusBubble.warn(
+		`Failed to banject nation: ${prettify(nationName)}`,
+	);
 	return false;
 }
 

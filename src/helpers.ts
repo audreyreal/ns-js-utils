@@ -13,7 +13,7 @@ export function parseHtml(html: string): Document {
  * @param str The string to canonicalize
  */
 export function canonicalize(str: string | undefined): string {
-	if (!str) return ""
+	if (!str) return "";
 	return str.toLowerCase().trim().replace(/\s+/g, "_"); // Replace spaces with underscores
 }
 
