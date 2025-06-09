@@ -254,9 +254,7 @@ export class NSScript {
 	 * @param wfe The new World Factbook Entry.
 	 * @returns A Promise that resolves to true if the change is successful, false otherwise.
 	 */
-	public async changeWFE(
-		wfe: string,
-	): Promise<boolean> {
+	public async changeWFE(wfe: string): Promise<boolean> {
 		return region.handleChangeWFE(this, wfe);
 	}
 
@@ -265,9 +263,7 @@ export class NSScript {
 	 * @param regionName The name of the region to request an embassy from.
 	 * @returns A Promise that resolves to true if the request is successful, false otherwise.
 	 */
-	public async requestEmbassy(
-		regionName: string,
-	): Promise<boolean> {
+	public async requestEmbassy(regionName: string): Promise<boolean> {
 		return region.handleRequestEmbassy(this, regionName);
 	}
 
@@ -276,9 +272,7 @@ export class NSScript {
 	 * @param regionName The name of the region to close the embassy with.
 	 * @returns A Promise that resolves to true if the embassy is closed, false otherwise.
 	 */
-	public async burnEmbassy(
-		regionName: string,
-	): Promise<boolean> {
+	public async burnEmbassy(regionName: string): Promise<boolean> {
 		return region.handleCloseEmbassy(this, regionName);
 	}
 
@@ -287,9 +281,7 @@ export class NSScript {
 	 * @param regionName The name of the region to abort the embassy opening with.
 	 * @returns A Promise that resolves to true if the embassy opening is aborted, false otherwise.
 	 */
-	public async abortEmbassyOpening(
-		regionName: string,
-	): Promise<boolean> {
+	public async abortEmbassyOpening(regionName: string): Promise<boolean> {
 		return region.handleAbortEmbassy(this, regionName);
 	}
 
@@ -298,9 +290,7 @@ export class NSScript {
 	 * @param regionName The name of the region to cancel the embassy closure with.
 	 * @returns A Promise that resolves to true if the embassy closure is canceled, false otherwise.
 	 */
-	public async cancelEmbassyClosure(
-		regionName: string,
-	): Promise<boolean> {
+	public async cancelEmbassyClosure(regionName: string): Promise<boolean> {
 		return region.handleCancelEmbassyClosure(this, regionName);
 	}
 
