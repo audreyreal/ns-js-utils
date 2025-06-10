@@ -182,9 +182,9 @@ export async function handleBanject(
 export async function handleTag(
 	context: NSScript,
 	action: "add" | "remove",
-	tag: ValidRegionTag
+	tag: ValidRegionTag,
 ): Promise<boolean> {
-	let prettified_action = ""
+	let prettified_action = "";
 	switch (action) {
 		case "add":
 			prettified_action = "Add";
@@ -200,13 +200,17 @@ export async function handleTag(
 	};
 	const text = await context.getNsHtmlPage("page=region_control", payload);
 	if (text.includes("Region Tags updated!")) {
-		context.statusBubble.success(`${prettified_action}ed tag: ${prettify(tag)}`);
+		context.statusBubble.success(
+			`${prettified_action}ed tag: ${prettify(tag)}`,
+		);
 		return true;
 	}
 	if (prettified_action === "Remov") {
 		prettified_action = "Remove";
 	}
-	context.statusBubble.warn(`Failed to ${prettified_action.toLowerCase()} tag: ${prettify(tag)}`);
+	context.statusBubble.warn(
+		`Failed to ${prettified_action.toLowerCase()} tag: ${prettify(tag)}`,
+	);
 	return false;
 }
 // TODO: add adding tags to regions, as well as uploading flags/banners, as well as detag wfe's from pauls website
