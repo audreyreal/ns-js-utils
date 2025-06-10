@@ -1,6 +1,7 @@
 import {
 	type MoveRegionFormData,
 	type NSScript,
+	type ValidRegionTag,
 	canonicalize,
 	prettify,
 } from "../../../nsdotjs";
@@ -178,4 +179,34 @@ export async function handleBanject(
 	return false;
 }
 
+export async function handleTag(
+	context: NSScript,
+	action: "add" | "remove",
+	tag: ValidRegionTag
+): Promise<boolean> {
+	let prettified_action = ""
+	switch (action) {
+		case "add":
+			prettified_action = "Add";
+			break;
+		case "remove":
+			prettified_action = "Remov"; // lol
+			break;
+	}
+	// payload consisting of f'{action}_tag': tag and "updatetagsbutton": "1"
+	const payload = {
+		[`${action}_tag`]: tag,
+		updatetagsbutton: "1",
+	};
+	const text = await context.getNsHtmlPage("page=region_control", payload);
+	if (text.includes("Region Tags updated!")) {
+		context.statusBubble.success(`${prettified_action}ed tag: ${prettify(tag)}`);
+		return true;
+	}
+	if (prettified_action === "Remov") {
+		prettified_action = "Remove";
+	}
+	context.statusBubble.warn(`Failed to ${prettified_action.toLowerCase()} tag: ${prettify(tag)}`);
+	return false;
+}
 // TODO: add adding tags to regions, as well as uploading flags/banners, as well as detag wfe's from pauls website

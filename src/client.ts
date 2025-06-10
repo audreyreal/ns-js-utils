@@ -7,6 +7,7 @@ import * as region from "./networking/html/handlers/region";
 import * as simultaneity from "./networking/html/handlers/simultaneity";
 import waitForSpace from "./networking/html/handlers/userInput";
 import * as wa from "./networking/html/handlers/worldAssembly";
+import type { ValidRegionTag } from "./networking/html/types";
 
 /**
  * Represents a script for interacting with NationStates, providing methods for authentication,
@@ -310,6 +311,24 @@ export class NSScript {
 	 */
 	public async eject(nationName: string): Promise<boolean> {
 		return region.handleEject(this, nationName);
+	}
+
+	/**
+	 * Adds a tag to the current region.
+	 * @param tag The tag to add.
+	 * @returns A Promise that resolves to true if the tag is added, false otherwise.
+	 */
+	public async addTag(tag: ValidRegionTag): Promise<boolean> {
+		return region.handleTag(this, "add", tag);
+	}
+
+	/**
+	 * Removes a tag from the current region.
+	 * @param tag The tag to remove.
+	 * @returns A Promise that resolves to true if the tag is removed, false otherwise.
+	 */
+	public async removeTag(tag: ValidRegionTag): Promise<boolean> {
+		return region.handleTag(this, "remove", tag);
 	}
 
 	/**
