@@ -1,5 +1,4 @@
 import { NSScript } from "./client";
-import { addTopBarButton } from "./gui/topBarButton";
 import { addSidebarButton } from "./gui/sideBarButton";
 import { prettify, canonicalize } from "./helpers";
 // imported everything for assigning to window
@@ -14,11 +13,11 @@ export type * from "./networking/html/types";
 export type * from "./gui/types";
 
 if (typeof window !== "undefined") {
-    Object.assign(window, {
-        NSScript,
-        addTopBarButton,
-        addSidebarButton,
-        prettify,
-        canonicalize
-    });
+	Object.assign(window, {
+		NSScript,
+		addTopBarButton,
+		addSidebarButton,
+		prettify,
+		canonicalize,
+	});
 }
