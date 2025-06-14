@@ -1,6 +1,6 @@
 import { NSScript } from "./client";
 import { addSidebarButton } from "./gui/sideBarButton";
-import { prettify, canonicalize } from "./helpers";
+import { canonicalize, prettify } from "./helpers";
 // imported everything for assigning to window
 // now exporting for docs
 export { NSScript } from "./client";
