@@ -102,11 +102,8 @@ export class NSScript {
 
 			// Add payload data to requestParams if provided
 			if (payload) {
-				for (const key in payload) {
-					if (Object.prototype.hasOwnProperty.call(payload, key)) {
-						requestParams.append(key, String(payload[key]));
-					}
-				}
+				Object.entries(payload).forEach(([key, value]) => 
+					requestParams.append(key, String(value)));
 			}
 
 			// Add special parameters
