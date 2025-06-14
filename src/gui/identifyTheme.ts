@@ -3,27 +3,33 @@ import type { NationStatesTheme } from "./types";
 /**
  * Analyzes the provided HTML content to detect the active NationStates theme.
  *
- * @param htmlContent - A string containing the HTML content of a NationStates page. Likely document.documentElement.innerHTML
+ * @param doc - The Document object of a NationStates page.
  * @returns The detected NationStatesTheme.
  */
 export function detectNationStatesTheme(
-	htmlContent: string,
+	doc: Document
 ): NationStatesTheme {
+	const stylesheets = Array.from(doc.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'))
+		.map(link => link.href);
+
+	const hasStylesheet = (substring: string): boolean =>
+		stylesheets.some(href => href.includes(substring));
+
 	// Check for Mobile theme (most specific CSS file name)
 	// Mobile theme includes a stylesheet like: /ns.m_v1740624640.css
-	if (htmlContent.includes("/ns.m_")) {
+	if (hasStylesheet("/ns.m_")) {
 		return "Mobile";
 	}
 
 	// Check for Antiquity theme
 	// Antiquity theme includes a stylesheet like: /ns.antiquity_v1745808370.css
-	if (htmlContent.includes("/ns.antiquity_")) {
+	if (hasStylesheet("/ns.antiquity_")) {
 		return "Antiquity";
 	}
 
 	// Check for Century theme
 	// Century theme includes a stylesheet like: /ns.century_v1681527181.css
-	if (htmlContent.includes("/ns.century_")) {
+	if (hasStylesheet("/ns.century_")) {
 		return "Century";
 	}
 
@@ -31,21 +37,16 @@ export function detectNationStatesTheme(
 	// The Rift theme is the default. It uses the base NS stylesheet and has specific layout identifiers.
 	// It must include the base stylesheet (e.g., /ns_v123.css)
 	// AND specific structural elements like id="paneltitle" or class="bel bannernation".
-	if (
-		htmlContent.includes("/ns_v") &&
-		(htmlContent.includes('id="paneltitle"') ||
-			htmlContent.includes('class="bel bannernation"'))
-	) {
+	const hasBaseStylesheet = hasStylesheet("/ns_v");
+	const hasRiftPanel = doc.getElementById("panel");
+
+	if (hasBaseStylesheet && hasRiftPanel) {
 		return "Rift";
 	}
 
 	// Check for Template-None theme
-	// This theme has no NationStates-specific stylesheets at all.
-	// This check comes after specific themes and Rift, as Rift *does* use /ns_v.
-	// If it wasn't identified as Mobile, Antiquity, Century, or Rift,
-	// and it lacks the base NS stylesheet and the common fontello stylesheet,
-	// it's considered Template-None.
-	if (!htmlContent.includes("/ns_v") && !htmlContent.includes("/fontello/")) {
+	const hasFontelloStylesheet = hasStylesheet("/fontello/");
+	if (!hasBaseStylesheet && !hasFontelloStylesheet) {
 		return "None";
 	}
 

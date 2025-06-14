@@ -19,7 +19,7 @@ export function addTopBarButton(
 	onClick: () => void,
 	position: TopBarButtonPosition = "right",
 ): HTMLDivElement | null {
-	const theme = detectNationStatesTheme(document.documentElement.innerHTML);
+	const theme = detectNationStatesTheme(document);
 	switch (theme) {
 		// Call the Rift-specific implementation
 		case "Rift":
