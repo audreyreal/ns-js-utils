@@ -6,14 +6,13 @@ import type { NationStatesTheme } from "./types";
  * @param doc - The Document object of a NationStates page.
  * @returns The detected NationStatesTheme.
  */
-export function detectNationStatesTheme(
-	doc: Document
-): NationStatesTheme {
-	const stylesheets = Array.from(doc.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'))
-		.map(link => link.href);
+export function detectNationStatesTheme(doc: Document): NationStatesTheme {
+	const stylesheets = Array.from(
+		doc.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'),
+	).map((link) => link.href);
 
 	const hasStylesheet = (substring: string): boolean =>
-		stylesheets.some(href => href.includes(substring));
+		stylesheets.some((href) => href.includes(substring));
 
 	// Check for Mobile theme (most specific CSS file name)
 	// Mobile theme includes a stylesheet like: /ns.m_v1740624640.css
