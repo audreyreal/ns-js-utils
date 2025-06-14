@@ -10,6 +10,7 @@ https://audreyreal.github.io/nsdotjs/
 
 ## todo:
 - [ ] api client
+- [ ] nicer looking status bubble. bootstrap card probably?
 - [X] (slightly) better docs
 - [X] more html site functions
 - [ ] sse client
